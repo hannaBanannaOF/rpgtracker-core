@@ -34,7 +34,7 @@ public class SessionService {
     private RabbitTemplate rabbitTemplate;
 
     public List<BasicSessionListingDTO> getDMedSessions() {
-        return sessionRepository.findAllByDmId(UUID.fromString("9af40220-4bf3-4e42-90f6-9f24c449aac4"))
+        return sessionRepository.findAllByDmId(UserUtils.getUserUUID())
                 .stream()
                 .map(e -> {
                     BasicSessionListingDTO dto = e.toListDTO();
