@@ -1,0 +1,181 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "preConditions": [
+          {
+            "onFail": "MARK_RAN",
+            "not": [
+              {
+                "tableExists": {
+                  "tableName": "session"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "202211041113",
+        "author": "HannaBananna",
+        "changes": [
+          {
+            "createTable": {
+              "tableName": "session",
+              "columns": [
+                {
+                  "column": {
+                    "name": "session_id",
+                    "type": "uuid",
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    },
+                    "defaultValueComputed": "gen_random_uuid()"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "session_name",
+                    "type": "varchar(100)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "dm_id",
+                    "type": "uuid",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "in_play",
+                    "type": "boolean",
+                    "constraints": {
+                      "nullable": false
+                    },
+                    "defaultValueBoolean":false
+                  }
+                },
+                {
+                  "column": {
+                    "name": "create_date",
+                    "type": "timestamp",
+                    "constraints": {
+                      "nullable": false
+                    },
+                    "defaultValueDate": "current_timestamp"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "update_date",
+                    "type": "timestamp",
+                    "constraints": {
+                      "nullable": false
+                    },
+                    "defaultValueDate": "current_timestamp"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "changeSet": {
+        "preConditions": [
+          {
+            "onFail": "MARK_RAN",
+            "not": [
+              {
+                "tableExists": {
+                  "tableName": "character_sheet"
+                }
+              }
+            ]
+          },
+          {
+            "tableExists": {
+              "tableName": "session"
+            }
+          }
+        ],
+        "id": "202211041058",
+        "author": "HannaBananna",
+        "changes": [
+          {
+            "createTable": {
+              "tableName": "character_sheet",
+              "columns": [
+                {
+                  "column": {
+                    "name": "character_sheet_id",
+                    "type": "uuid",
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    },
+                    "defaultValueComputed": "gen_random_uuid()"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "character_name",
+                    "type": "varchar(100)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "player_id",
+                    "type": "uuid",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "session_id",
+                    "type": "uuid",
+                    "constraints": {
+                      "foreignKeyName": "fk_session_character_sheet",
+                      "references": "session(session_id)"
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "create_date",
+                    "type": "timestamp",
+                    "constraints": {
+                      "nullable": false
+                    },
+                    "defaultValueDate": "current_timestamp"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "update_date",
+                    "type": "timestamp",
+                    "constraints": {
+                      "nullable": false
+                    },
+                    "defaultValueDate": "current_timestamp"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
