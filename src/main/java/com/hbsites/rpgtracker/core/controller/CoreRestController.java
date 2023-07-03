@@ -1,8 +1,8 @@
 package com.hbsites.rpgtracker.core.controller;
 
 import com.hbsites.hbsitescommons.config.ApiVersion;
+import com.hbsites.hbsitescommons.dto.CharacterSheetListingDTO;
 import com.hbsites.rpgtracker.core.dto.BasicSessionListingDTO;
-import com.hbsites.rpgtracker.core.dto.CharacterSheetListingDTO;
 import com.hbsites.rpgtracker.core.dto.ConfigDTO;
 import com.hbsites.rpgtracker.core.service.CharacterSheetService;
 import com.hbsites.rpgtracker.core.service.ConfigurationService;

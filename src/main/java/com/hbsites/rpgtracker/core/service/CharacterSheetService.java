@@ -1,7 +1,8 @@
 package com.hbsites.rpgtracker.core.service;
 
+import com.hbsites.hbsitescommons.dto.CharacterSheetListingDTO;
 import com.hbsites.hbsitescommons.utils.UserUtils;
-import com.hbsites.rpgtracker.core.dto.CharacterSheetListingDTO;
+import com.hbsites.rpgtracker.core.entity.CharacterSheetEntity;
 import com.hbsites.rpgtracker.core.repository.CharacterSheetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -18,6 +19,6 @@ public class CharacterSheetService {
 
     public List<CharacterSheetListingDTO> getAllCurrentUserSheets() {
         return characterSheetRepository.findAllByPlayerId(UserUtils.getUserUUID()).stream()
-                .map(c -> ((CharacterSheetListingDTO) c.toListDTO())).collect(Collectors.toList());
+                .map(CharacterSheetEntity::toListDTO).collect(Collectors.toList());
     }
 }

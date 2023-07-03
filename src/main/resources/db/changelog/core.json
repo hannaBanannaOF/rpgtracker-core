@@ -62,6 +62,15 @@
                 },
                 {
                   "column": {
+                    "name": "trpg_system",
+                    "type": "varchar(45)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
                     "name": "create_date",
                     "type": "timestamp",
                     "constraints": {
@@ -148,6 +157,15 @@
                     "constraints": {
                       "foreignKeyName": "fk_session_character_sheet",
                       "references": "session(session_id)"
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "trpg_system",
+                    "type": "varchar(45)",
+                    "constraints": {
+                      "nullable": false
                     }
                   }
                 },
