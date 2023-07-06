@@ -26,8 +26,8 @@ public class ResourceServerConfig {
     public DefaultSecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(AbstractHttpConfigurer::disable).
                 authorizeHttpRequests(authz -> {
-//                    authz.requestMatchers("/**").hasRole("RPGTRACKER_USER");
-                    authz.requestMatchers("/**").permitAll();
+                    authz.requestMatchers("/**").hasRole("RPGTRACKER_USER");
+//                    authz.requestMatchers("/**").permitAll();
                 })
                 .oauth2ResourceServer(oauth ->
                         oauth.jwt(jwt ->

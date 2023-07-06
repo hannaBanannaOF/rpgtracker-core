@@ -1,16 +1,16 @@
 package com.hbsites.rpgtracker.core.service;
 
-import com.hbsites.hbsitescommons.dto.UserDTO;
+import com.hbsites.hbsitescommons.dto.SessionBasicInfoDTO;
+import com.hbsites.hbsitescommons.dto.SessionSheetDTO;
 import com.hbsites.hbsitescommons.utils.UserUtils;
 import com.hbsites.rpgtracker.core.dto.BasicSessionListingDTO;
-import com.hbsites.rpgtracker.core.entity.CharacterSheetEntity;
 import com.hbsites.rpgtracker.core.producer.UserRequestProducer;
 import com.hbsites.rpgtracker.core.repository.SessionRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,18 +29,19 @@ public class SessionService {
     public List<BasicSessionListingDTO> getDMedSessions() {
         return sessionRepository.findAllByDmId(UserUtils.getUserUUID())
                 .stream()
+                .map(e -> e.toListDTO(userRequestProducer))
+                .collect(Collectors.toList());
+    }
+
+    public List<SessionBasicInfoDTO> getInfoById(List<UUID> uuids) {
+        return sessionRepository.findAllById(uuids)
+                .stream()
                 .map(e -> {
-                    BasicSessionListingDTO dto = e.toListDTO();
-
-                    // Populate player list
-                    List<UUID> playerIds = e.getSheets().stream().map(CharacterSheetEntity::getPlayerId).toList();
-                    HashSet<UUID> playerIdsUnique = new HashSet<UUID>(playerIds);
-
-                    List<UserDTO> users = userRequestProducer.getUsersFromRabbit(playerIdsUnique.stream().toList());
-
-                    dto.setPlayers(playerIdsUnique.stream().map(uuid ->
-                            users.stream().filter(us -> us.getUuid().equals(uuid)).findFirst().orElse(new UserDTO()).getDisplayName()
-                    ).collect(Collectors.toList()));
+                    Hibernate.initialize(e.getSheets());
+                    SessionBasicInfoDTO dto = new SessionBasicInfoDTO();
+                    dto.setSessionName(e.getSessionName());
+                    dto.setCoreId(e.getSessionId());
+                    dto.setSessionSheets(e.getSheets().stream().map(e2 -> new SessionSheetDTO(e2.getId(), e2.getCharacterName())).collect(Collectors.toList()));
                     return dto;
                 })
                 .collect(Collectors.toList());

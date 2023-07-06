@@ -1,7 +1,9 @@
 package com.hbsites.rpgtracker.core.entity;
 
-import com.hbsites.hbsitescommons.entity.BaseEntity;
+import com.hbsites.hbsitescommons.dto.UserDTO;
+import com.hbsites.hbsitescommons.entity.RabbitBaseEntity;
 import com.hbsites.hbsitescommons.enumeration.ETRPGSystem;
+import com.hbsites.hbsitescommons.interfaces.EventProducerInterface;
 import com.hbsites.rpgtracker.core.dto.BasicSessionListingDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,13 +18,15 @@ import lombok.Data;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
 @Table(name = "session")
-public class SessionEntity extends BaseEntity<BasicSessionListingDTO, BasicSessionListingDTO> {
+public class SessionEntity extends RabbitBaseEntity<BasicSessionListingDTO, BasicSessionListingDTO, List<UserDTO>> {
 
     @Id
     @GeneratedValue
@@ -42,12 +46,41 @@ public class SessionEntity extends BaseEntity<BasicSessionListingDTO, BasicSessi
     @Enumerated(EnumType.STRING)
     private ETRPGSystem trpgSystem;
 
-    @OneToMany(mappedBy = "session", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "session", fetch = FetchType.EAGER, targetEntity = CharacterSheetEntity.class)
     private List<CharacterSheetEntity> sheets;
 
     @Override
+    public BasicSessionListingDTO toListDTO(EventProducerInterface<List<UserDTO>> producer) {
+        List<String> players = new ArrayList<>();
+
+        if (producer != null) {
+            // Populate player list
+            List<UUID> playerIds = getSheets().stream().map(CharacterSheetEntity::getPlayerId).toList();
+            HashSet<UUID> playerIdsUnique = new HashSet<>(playerIds);
+
+            List<UserDTO> users = producer.getFromRabbitMQ(playerIdsUnique.stream().toList());
+
+            players = playerIdsUnique.stream().map(uuid ->
+                    users.stream().filter(us -> us.getUuid().equals(uuid)).findFirst().orElse(new UserDTO()).getDisplayName()
+            ).collect(Collectors.toList());
+        }
+
+        return new BasicSessionListingDTO(
+                this.getSessionId(),
+                this.getSessionName(),
+                this.getTrpgSystem(),
+                this.getInPlay(),
+                players);
+    }
+
+    @Override
+    public BasicSessionListingDTO toDetailDTO(EventProducerInterface<List<UserDTO>> producer) {
+        throw new NotImplementedException();
+    }
+
+    @Override
     public BasicSessionListingDTO toListDTO() {
-        return new BasicSessionListingDTO(this.getSessionId(), this.getSessionName(), this.getTrpgSystem(), this.getInPlay(), new ArrayList<String>());
+        throw new NotImplementedException();
     }
 
     @Override

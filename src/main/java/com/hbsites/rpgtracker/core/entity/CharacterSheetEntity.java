@@ -1,8 +1,10 @@
 package com.hbsites.rpgtracker.core.entity;
 
 import com.hbsites.hbsitescommons.dto.CharacterSheetListingDTO;
-import com.hbsites.hbsitescommons.entity.BaseEntity;
+import com.hbsites.hbsitescommons.dto.UserDTO;
+import com.hbsites.hbsitescommons.entity.RabbitBaseEntity;
 import com.hbsites.hbsitescommons.enumeration.ETRPGSystem;
+import com.hbsites.hbsitescommons.interfaces.EventProducerInterface;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,12 +19,13 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import org.apache.commons.lang3.NotImplementedException;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "character_sheet")
-public class CharacterSheetEntity extends BaseEntity<CharacterSheetListingDTO<SessionEntity>, CharacterSheetListingDTO<SessionEntity>> {
+public class CharacterSheetEntity extends RabbitBaseEntity<CharacterSheetListingDTO<SessionEntity>, CharacterSheetListingDTO<SessionEntity>, List<UserDTO>> {
 
     @Column(name = "id", columnDefinition = "uuid")
     @Id
@@ -44,8 +47,23 @@ public class CharacterSheetEntity extends BaseEntity<CharacterSheetListingDTO<Se
     private SessionEntity session;
 
     @Override
+    public CharacterSheetListingDTO<SessionEntity> toListDTO(EventProducerInterface<List<UserDTO>> producer) {
+        return new CharacterSheetListingDTO<>(
+                getId(),
+                getCharacterName(),
+                getTrpgSystem(),
+                getSession() != null ? getSession().toListDTO(null) : null,
+                producer != null ? producer.getFromRabbitMQ(List.of(getPlayerId())).stream().findFirst().orElse(new UserDTO()).getDisplayName() : "");
+    }
+
+    @Override
+    public CharacterSheetListingDTO<SessionEntity> toDetailDTO(EventProducerInterface<List<UserDTO>> producer) {
+        throw new NotImplementedException();
+    }
+
+    @Override
     public CharacterSheetListingDTO<SessionEntity> toListDTO() {
-        return new CharacterSheetListingDTO<SessionEntity>(getId(), getCharacterName(), getTrpgSystem(), getSession() != null ? getSession().toListDTO() : null, "");
+        throw new NotImplementedException();
     }
 
     @Override

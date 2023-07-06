@@ -26,13 +26,10 @@ public class CharacterSheetService {
     private UserRequestProducer userRequestProducer;
 
     public List<CharacterSheetListingDTO<SessionEntity>> getAllCurrentUserSheets() {
-        return characterSheetRepository.findAllByPlayerId(UserUtils.getUserUUID()).stream()
-                .map(e -> {
-                    CharacterSheetListingDTO<SessionEntity> dto = e.toListDTO();
-                    UserDTO u = userRequestProducer.getUsersFromRabbit(List.of(e.getPlayerId())).stream().findFirst().orElse(new UserDTO());
-                    dto.setUserName(u.getDisplayName());
-                    return dto;
-                }).collect(Collectors.toList());
+        return characterSheetRepository.findAllByPlayerId(UserUtils.getUserUUID())
+                .stream()
+                .map(e -> e.toListDTO(null))
+                .collect(Collectors.toList());
     }
 
     public List<CharacterSheetBasicInfoDTO> getInfoById(List<UUID> ids) {
@@ -41,7 +38,7 @@ public class CharacterSheetService {
                 .map(e -> {
                     CharacterSheetBasicInfoDTO dto = new CharacterSheetBasicInfoDTO();
                     dto.setCharacterName(e.getCharacterName());
-                    UserDTO u = userRequestProducer.getUsersFromRabbit(List.of(e.getPlayerId())).stream().findFirst().orElse(new UserDTO());dto.setPlayer(u);
+                    UserDTO u = userRequestProducer.getFromRabbitMQ(List.of(e.getPlayerId())).stream().findFirst().orElse(new UserDTO());
                     dto.setPlayer(u);
                     return dto;
                 }).collect(Collectors.toList());

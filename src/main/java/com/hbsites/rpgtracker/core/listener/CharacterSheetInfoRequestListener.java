@@ -33,8 +33,7 @@ public class CharacterSheetInfoRequestListener {
 
         //This is the message to be returned by the server
         CharacterSheetBasicInfoDTOListPayload build = new CharacterSheetBasicInfoDTOListPayload(infos);
-//        CorrelationData correlationData = new CorrelationData(message.getMessageProperties().getCorrelationId());
-        coreRabbitTemplate.convertSendAndReceiveAsType(RabbitQueues.RPGTRACKER_CORE_EXCHANGE, RabbitQueues.RPGTRACKER_CORE_CHARACTER_SHEET_RESPONSE, build, new ParameterizedTypeReference<>(){});
+//      coreRabbitTemplate.convertSendAndReceiveAsType(RabbitQueues.RPGTRACKER_CORE_EXCHANGE, RabbitQueues.RPGTRACKER_CORE_CHARACTER_SHEET_RESPONSE, build, new ParameterizedTypeReference<>(){});
 
     }
 

@@ -1,6 +1,7 @@
 package com.hbsites.rpgtracker.core.producer;
 
 import com.hbsites.hbsitescommons.dto.UserDTO;
+import com.hbsites.hbsitescommons.interfaces.EventProducerInterface;
 import com.hbsites.hbsitescommons.messages.UUIDListPayload;
 import com.hbsites.hbsitescommons.messages.UserDTOListPayload;
 import com.hbsites.hbsitescommons.queues.RabbitQueues;
@@ -14,12 +15,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-public class UserRequestProducer {
+public class UserRequestProducer implements EventProducerInterface<List<UserDTO>> {
 
     @Autowired
     RabbitTemplate userRabbitTemplate;
 
-    public List<UserDTO> getUsersFromRabbit(List<UUID> uuids) {
+    @Override
+    public List<UserDTO> getFromRabbitMQ(List<UUID> uuids) {
 
         UUIDListPayload newMsg = new UUIDListPayload(uuids);
         UserDTOListPayload result = userRabbitTemplate.convertSendAndReceiveAsType(RabbitQueues.USER_EXCHANGE, RabbitQueues.USER_REQUEST_QUEUE, newMsg, new ParameterizedTypeReference<>(){});
