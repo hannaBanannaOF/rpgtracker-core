@@ -18,7 +18,7 @@ public class WebMvcConfig extends DelegatingWebMvcConfiguration {
 
     @Override
     public RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
-        ApiVersionRequestMappingHandlerMapping apiVersionRequestMappingHandlerMapping = new ApiVersionRequestMappingHandlerMapping("/api/v");
+        ApiVersionRequestMappingHandlerMapping apiVersionRequestMappingHandlerMapping = new ApiVersionRequestMappingHandlerMapping("/core/api/v");
         apiVersionRequestMappingHandlerMapping.setInterceptors(new WebRequestHandlerInterceptorAdapter(new RequestInterceptor()));
 
         return apiVersionRequestMappingHandlerMapping;

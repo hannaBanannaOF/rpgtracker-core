@@ -23,7 +23,7 @@
               "columns": [
                 {
                   "column": {
-                    "name": "session_id",
+                    "name": "id",
                     "type": "uuid",
                     "constraints": {
                       "primaryKey": true,
@@ -123,7 +123,7 @@
               "columns": [
                 {
                   "column": {
-                    "name": "character_sheet_id",
+                    "name": "id",
                     "type": "uuid",
                     "constraints": {
                       "primaryKey": true,
@@ -156,7 +156,7 @@
                     "type": "uuid",
                     "constraints": {
                       "foreignKeyName": "fk_session_character_sheet",
-                      "references": "session(session_id)"
+                      "references": "session(id)"
                     }
                   }
                 },

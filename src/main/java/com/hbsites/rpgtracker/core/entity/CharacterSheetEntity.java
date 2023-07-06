@@ -22,9 +22,9 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "character_sheet")
-public class CharacterSheetEntity extends BaseEntity<CharacterSheetListingDTO, CharacterSheetListingDTO> {
+public class CharacterSheetEntity extends BaseEntity<CharacterSheetListingDTO<SessionEntity>, CharacterSheetListingDTO<SessionEntity>> {
 
-    @Column(name = "character_sheet_id", columnDefinition = "uuid")
+    @Column(name = "id", columnDefinition = "uuid")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
@@ -40,16 +40,16 @@ public class CharacterSheetEntity extends BaseEntity<CharacterSheetListingDTO, C
     private ETRPGSystem trpgSystem;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = SessionEntity.class)
-    @JoinColumn(name = "session_id", referencedColumnName = "session_id")
+    @JoinColumn(name = "session_id", referencedColumnName = "id")
     private SessionEntity session;
 
     @Override
-    public CharacterSheetListingDTO toListDTO() {
-        return new CharacterSheetListingDTO(getId(), getCharacterName(), getTrpgSystem(), getSession().getSessionName());
+    public CharacterSheetListingDTO<SessionEntity> toListDTO() {
+        return new CharacterSheetListingDTO<SessionEntity>(getId(), getCharacterName(), getTrpgSystem(), getSession() != null ? getSession().toListDTO() : null, "");
     }
 
     @Override
-    public CharacterSheetListingDTO toDetailDTO() {
+    public CharacterSheetListingDTO<SessionEntity> toDetailDTO() {
         throw new NotImplementedException();
     }
 }

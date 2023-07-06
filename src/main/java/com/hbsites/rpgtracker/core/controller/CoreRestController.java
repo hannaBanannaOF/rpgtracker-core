@@ -4,6 +4,7 @@ import com.hbsites.hbsitescommons.config.ApiVersion;
 import com.hbsites.hbsitescommons.dto.CharacterSheetListingDTO;
 import com.hbsites.rpgtracker.core.dto.BasicSessionListingDTO;
 import com.hbsites.rpgtracker.core.dto.ConfigDTO;
+import com.hbsites.rpgtracker.core.entity.SessionEntity;
 import com.hbsites.rpgtracker.core.service.CharacterSheetService;
 import com.hbsites.rpgtracker.core.service.ConfigurationService;
 import com.hbsites.rpgtracker.core.service.SessionService;
@@ -41,7 +42,7 @@ public class CoreRestController {
     }
 
     @GetMapping("/my-character-sheets")
-    public List<CharacterSheetListingDTO> getMyCharacterSheets() {
+    public List<CharacterSheetListingDTO<SessionEntity>> getMyCharacterSheets() {
         return characterSheetService.getAllCurrentUserSheets();
     }
 }

@@ -1,10 +1,7 @@
 package com.hbsites.rpgtracker.core.entity;
 
-import com.hbsites.hbsitescommons.dto.UserDTO;
-import com.hbsites.hbsitescommons.dto.UserDTOListPayload;
 import com.hbsites.hbsitescommons.entity.BaseEntity;
 import com.hbsites.hbsitescommons.enumeration.ETRPGSystem;
-import com.hbsites.rpgtracker.core.config.RabbitMQConfig;
 import com.hbsites.rpgtracker.core.dto.BasicSessionListingDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,19 +14,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import org.apache.commons.lang3.NotImplementedException;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageBuilder;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.utils.SerializationUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -38,7 +26,7 @@ public class SessionEntity extends BaseEntity<BasicSessionListingDTO, BasicSessi
 
     @Id
     @GeneratedValue
-    @Column(name = "session_id", columnDefinition = "uuid")
+    @Column(name = "id", columnDefinition = "uuid")
     private UUID sessionId;
 
     @Column(name = "session_name", columnDefinition = "varchar(100)", nullable = false)
