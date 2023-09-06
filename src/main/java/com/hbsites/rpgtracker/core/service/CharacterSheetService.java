@@ -2,10 +2,8 @@ package com.hbsites.rpgtracker.core.service;
 
 import com.hbsites.hbsitescommons.dto.CharacterSheetBasicInfoDTO;
 import com.hbsites.hbsitescommons.dto.CharacterSheetListingDTO;
-import com.hbsites.hbsitescommons.dto.UserDTO;
 import com.hbsites.hbsitescommons.utils.UserUtils;
 import com.hbsites.rpgtracker.core.entity.SessionEntity;
-import com.hbsites.rpgtracker.core.producer.UserRequestProducer;
 import com.hbsites.rpgtracker.core.repository.CharacterSheetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -21,10 +19,6 @@ public class CharacterSheetService {
     @Lazy
     private CharacterSheetRepository characterSheetRepository;
 
-    @Autowired
-    @Lazy
-    private UserRequestProducer userRequestProducer;
-
     public List<CharacterSheetListingDTO<SessionEntity>> getAllCurrentUserSheets() {
         return characterSheetRepository.findAllByPlayerId(UserUtils.getUserUUID())
                 .stream()
@@ -38,8 +32,8 @@ public class CharacterSheetService {
                 .map(e -> {
                     CharacterSheetBasicInfoDTO dto = new CharacterSheetBasicInfoDTO();
                     dto.setCharacterName(e.getCharacterName());
-                    UserDTO u = userRequestProducer.getFromRabbitMQ(List.of(e.getPlayerId())).stream().findFirst().orElse(new UserDTO());
-                    dto.setPlayer(u);
+                    dto.setSheetId(e.getId());
+                    dto.setPlayerId(e.getPlayerId());
                     return dto;
                 }).collect(Collectors.toList());
     }

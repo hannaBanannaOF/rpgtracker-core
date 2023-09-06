@@ -4,7 +4,6 @@ import com.hbsites.hbsitescommons.dto.CharacterSheetBasicInfoDTO;
 import com.hbsites.hbsitescommons.messages.CharacterSheetBasicInfoDTOListPayload;
 import com.hbsites.hbsitescommons.messages.UUIDListPayload;
 import com.hbsites.hbsitescommons.queues.RabbitQueues;
-import com.hbsites.rpgtracker.core.config.RabbitMQRPGTrackerCoreConfig;
 import com.hbsites.rpgtracker.core.service.CharacterSheetService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -24,16 +23,15 @@ public class CharacterSheetInfoRequestListener {
     CharacterSheetService characterSheetService;
 
     @Autowired
-    @Qualifier("coreRabbitTemplate")
-    RabbitTemplate coreRabbitTemplate;
+    RabbitTemplate rabbitTemplate;
 
-    @RabbitListener(queues = RabbitQueues.RPGTRACKER_CORE_CHARACTER_SHEET_REQUEST)
+    @RabbitListener(queues = RabbitQueues.CORE_CHARACTER_SHEET_REQUEST_QUEUE)
     public void process(UUIDListPayload message) {
         List<CharacterSheetBasicInfoDTO> infos = characterSheetService.getInfoById(message.uuids());
 
         //This is the message to be returned by the server
-        CharacterSheetBasicInfoDTOListPayload build = new CharacterSheetBasicInfoDTOListPayload(infos);
-//      coreRabbitTemplate.convertSendAndReceiveAsType(RabbitQueues.RPGTRACKER_CORE_EXCHANGE, RabbitQueues.RPGTRACKER_CORE_CHARACTER_SHEET_RESPONSE, build, new ParameterizedTypeReference<>(){});
+        CharacterSheetBasicInfoDTOListPayload build = new CharacterSheetBasicInfoDTOListPayload(infos, message.userRequested(), message.microservice());
+        rabbitTemplate.convertSendAndReceiveAsType(RabbitQueues.RPGTRACKER_COC_EXCHANGE, RabbitQueues.COC_CHARACTER_SHEET_RESPONSE_QUEUE, build, new ParameterizedTypeReference<>(){});
 
     }
 

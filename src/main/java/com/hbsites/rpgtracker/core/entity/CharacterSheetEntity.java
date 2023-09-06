@@ -25,7 +25,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "character_sheet")
-public class CharacterSheetEntity extends RabbitBaseEntity<CharacterSheetListingDTO<SessionEntity>, CharacterSheetListingDTO<SessionEntity>, List<UserDTO>> {
+public class CharacterSheetEntity extends RabbitBaseEntity<CharacterSheetListingDTO<SessionEntity>, CharacterSheetListingDTO<SessionEntity>> {
 
     @Column(name = "id", columnDefinition = "uuid")
     @Id
@@ -47,17 +47,17 @@ public class CharacterSheetEntity extends RabbitBaseEntity<CharacterSheetListing
     private SessionEntity session;
 
     @Override
-    public CharacterSheetListingDTO<SessionEntity> toListDTO(EventProducerInterface<List<UserDTO>> producer) {
+    public CharacterSheetListingDTO<SessionEntity> toListDTO(EventProducerInterface producer) {
         return new CharacterSheetListingDTO<>(
                 getId(),
                 getCharacterName(),
                 getTrpgSystem(),
-                getSession() != null ? getSession().toListDTO(null) : null,
-                producer != null ? producer.getFromRabbitMQ(List.of(getPlayerId())).stream().findFirst().orElse(new UserDTO()).getDisplayName() : "");
+                getSession() != null ? getSession().toListDTO(null) : null
+        );
     }
 
     @Override
-    public CharacterSheetListingDTO<SessionEntity> toDetailDTO(EventProducerInterface<List<UserDTO>> producer) {
+    public CharacterSheetListingDTO<SessionEntity> toDetailDTO(EventProducerInterface producer) {
         throw new NotImplementedException();
     }
 

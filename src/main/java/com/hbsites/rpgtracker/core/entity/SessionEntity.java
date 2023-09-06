@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Data
 @Entity
 @Table(name = "session")
-public class SessionEntity extends RabbitBaseEntity<BasicSessionListingDTO, BasicSessionListingDTO, List<UserDTO>> {
+public class SessionEntity extends RabbitBaseEntity<BasicSessionListingDTO, BasicSessionListingDTO> {
 
     @Id
     @GeneratedValue
@@ -50,7 +50,7 @@ public class SessionEntity extends RabbitBaseEntity<BasicSessionListingDTO, Basi
     private List<CharacterSheetEntity> sheets;
 
     @Override
-    public BasicSessionListingDTO toListDTO(EventProducerInterface<List<UserDTO>> producer) {
+    public BasicSessionListingDTO toListDTO(EventProducerInterface producer) {
         List<String> players = new ArrayList<>();
 
         if (producer != null) {
@@ -58,23 +58,18 @@ public class SessionEntity extends RabbitBaseEntity<BasicSessionListingDTO, Basi
             List<UUID> playerIds = getSheets().stream().map(CharacterSheetEntity::getPlayerId).toList();
             HashSet<UUID> playerIdsUnique = new HashSet<>(playerIds);
 
-            List<UserDTO> users = producer.getFromRabbitMQ(playerIdsUnique.stream().toList());
-
-            players = playerIdsUnique.stream().map(uuid ->
-                    users.stream().filter(us -> us.getUuid().equals(uuid)).findFirst().orElse(new UserDTO()).getDisplayName()
-            ).collect(Collectors.toList());
+            producer.getFromRabbitMQ(playerIdsUnique.stream().toList(), this.getSessionId(), null);
         }
 
         return new BasicSessionListingDTO(
                 this.getSessionId(),
                 this.getSessionName(),
                 this.getTrpgSystem(),
-                this.getInPlay(),
-                players);
+                this.getInPlay());
     }
 
     @Override
-    public BasicSessionListingDTO toDetailDTO(EventProducerInterface<List<UserDTO>> producer) {
+    public BasicSessionListingDTO toDetailDTO(EventProducerInterface producer) {
         throw new NotImplementedException();
     }
 

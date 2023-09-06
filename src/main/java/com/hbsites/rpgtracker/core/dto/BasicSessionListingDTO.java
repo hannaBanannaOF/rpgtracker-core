@@ -14,12 +14,11 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 public class BasicSessionListingDTO extends SessionListingDTO<SessionEntity> {
-    public BasicSessionListingDTO(UUID uuid, String sessionName, ETRPGSystem system, boolean inPlay, List<String> players) {
+    public BasicSessionListingDTO(UUID uuid, String sessionName, ETRPGSystem system, boolean inPlay) {
         this.setUuid(uuid);
         this.setSessionName(sessionName);
         this.setSystem(system);
         this.setInPlay(inPlay);
-        this.setPlayers(players);
     }
 
     @Override

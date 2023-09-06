@@ -24,11 +24,12 @@ public class ResourceServerConfig {
 
     @Bean
     public DefaultSecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(AbstractHttpConfigurer::disable).
-                authorizeHttpRequests(authz -> {
-                    authz.requestMatchers("/**").hasRole("RPGTRACKER_USER");
-//                    authz.requestMatchers("/**").permitAll();
+        http.cors(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authz -> {
+                    authz.requestMatchers("/core/ws/**").permitAll();
+                    authz.requestMatchers("/core/api/**").hasRole("RPGTRACKER_USER");
                 })
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/core/ws/**"))
                 .oauth2ResourceServer(oauth ->
                         oauth.jwt(jwt ->
                                 jwt.jwtAuthenticationConverter(keycloakJwtAuthenticationConverter())
