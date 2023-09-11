@@ -1,6 +1,9 @@
 package com.hbsites.rpgtracker.core.repository;
 
+import com.hbsites.hbsitescommons.enumeration.ETRPGSystem;
 import com.hbsites.rpgtracker.core.entity.SessionEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +12,7 @@ import java.util.UUID;
 
 @Repository
 public interface SessionRepository extends JpaRepository<SessionEntity, UUID> {
-    List<SessionEntity> findAllByDmId(UUID dmID);
+    Page<SessionEntity> findAllByDmId(UUID dmID, Pageable page);
 
-    Boolean existsByDmId(UUID dmID);
+    Boolean existsByDmIdAndTrpgSystem(UUID dmID, ETRPGSystem trpgSystem);
 }

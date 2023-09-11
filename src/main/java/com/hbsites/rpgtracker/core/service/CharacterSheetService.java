@@ -7,6 +7,9 @@ import com.hbsites.rpgtracker.core.entity.SessionEntity;
 import com.hbsites.rpgtracker.core.repository.CharacterSheetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +22,10 @@ public class CharacterSheetService {
     @Lazy
     private CharacterSheetRepository characterSheetRepository;
 
-    public List<CharacterSheetListingDTO<SessionEntity>> getAllCurrentUserSheets() {
-        return characterSheetRepository.findAllByPlayerId(UserUtils.getUserUUID())
-                .stream()
-                .map(e -> e.toListDTO(null))
-                .collect(Collectors.toList());
+    public Page<CharacterSheetListingDTO<SessionEntity>> getAllCurrentUserSheets(int page) {
+        Pageable pageRequest = PageRequest.of(page, 20);
+        return characterSheetRepository.findAllByPlayerId(UserUtils.getUserUUID(), pageRequest)
+                .map(e -> e.toListDTO(null));
     }
 
     public List<CharacterSheetBasicInfoDTO> getInfoById(List<UUID> ids) {

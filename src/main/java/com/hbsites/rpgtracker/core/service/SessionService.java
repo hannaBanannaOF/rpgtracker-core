@@ -10,6 +10,9 @@ import com.hbsites.rpgtracker.core.repository.SessionRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,11 +31,10 @@ public class SessionService {
     @Autowired
     private UserRequestProducer userRequestProducer;
 
-    public List<BasicSessionListingDTO> getDMedSessions() {
-        return sessionRepository.findAllByDmId(UserUtils.getUserUUID())
-                .stream()
-                .map(e -> e.toListDTO(userRequestProducer))
-                .collect(Collectors.toList());
+    public Page<BasicSessionListingDTO> getDMedSessions(int page) {
+        Pageable pageRequest = PageRequest.of(page, 20);
+        return sessionRepository.findAllByDmId(UserUtils.getUserUUID(), pageRequest)
+                .map(e -> e.toListDTO(userRequestProducer));
     }
 
     public List<SessionBasicInfoDTO> getInfoById(List<UUID> uuids) {
@@ -41,6 +43,7 @@ public class SessionService {
                 .map(e -> {
                     Hibernate.initialize(e.getSheets());
                     SessionBasicInfoDTO dto = new SessionBasicInfoDTO();
+                    dto.setDmId(e.getDmId());
                     dto.setSessionName(e.getSessionName());
                     dto.setCoreId(e.getSessionId());
                     dto.setSessionSheets(e.getSheets().stream().map(e2 -> new SessionSheetDTO(e2.getId(), e2.getCharacterName())).collect(Collectors.toList()));

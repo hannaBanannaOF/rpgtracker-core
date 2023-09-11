@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class ConfigDTO {
-    private boolean dm;
+    private boolean isCocDm;
+    private boolean hasCocSheet;
 }
