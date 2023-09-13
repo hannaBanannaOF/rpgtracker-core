@@ -58,7 +58,11 @@ public class SessionEntity extends RabbitBaseEntity<BasicSessionListingDTO, Basi
             List<UUID> playerIds = getSheets().stream().map(CharacterSheetEntity::getPlayerId).toList();
             HashSet<UUID> playerIdsUnique = new HashSet<>(playerIds);
 
-            producer.getFromRabbitMQ(playerIdsUnique.stream().toList(), this.getSessionId(), null);
+            try {
+                producer.getFromRabbitMQ(playerIdsUnique.stream().toList(), this.getSessionId(), null);
+            } catch (Exception e) {
+                // ignore it
+            }
         }
 
         return new BasicSessionListingDTO(

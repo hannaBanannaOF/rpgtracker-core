@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.hbsites.rpgtracker</groupId>
 	<artifactId>core-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>rpgtracker-core-service</name>
 	<description>RPGTracker - Core</description>
 	<properties>
@@ -76,7 +76,7 @@
         <dependency>
             <groupId>com.hbsites</groupId>
             <artifactId>hbsites-commons</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
