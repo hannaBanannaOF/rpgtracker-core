@@ -1,16 +1,25 @@
-spring.datasource.hikari.connectionTimeout=20000
-spring.datasource.hikari.maximumPoolSize=5
-spring.datasource.url=jdbc:postgresql://localhost:5432/rpgtracker-core?currentSchema=public
-spring.datasource.username=postgres
-spring.datasource.password=postgres
-spring.datasource.driver-class-name=org.postgresql.Driver
-spring.liquibase.change-log=classpath:db/master-core.json
-spring.jpa.show-sql=true
-spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://localhost:8083/realms/HBsites/protocol/openid-connect/certs
-spring.rabbitmq.host=localhost
-spring.rabbitmq.port=5672
-spring.rabbitmq.username=rpgtracker
-spring.rabbitmq.password=rpgtracker
-spring.rabbitmq.publisher-confirm-type=correlated
-spring.rabbitmq.publisher-returns=true
-server.port=8081
+spring:
+  datasource:
+    hikari:
+      connectionTimeout: "20000"
+      maximumPoolSize: "5"
+    url: "jdbc:postgresql://localhost:5432/rpgtracker-core?currentSchema=public"
+    username: "postgres"
+    password: "postgres"
+    driver-class-name: "org.postgresql.Driver"
+  liquibase:
+    change-log: "classpath:db/master-core.json"
+  jpa:
+    show-sql: "true"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: "http://localhost:8083/realms/HBsites/protocol/openid-connect/certs"
+  rabbitmq:
+    host: "localhost"
+    port: "5672"
+    username: "rpgtracker"
+    password: "rpgtracker"
+server:
+  port: "8081"
