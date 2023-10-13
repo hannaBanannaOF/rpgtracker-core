@@ -1,10 +1,9 @@
 package com.hbsites.rpgtracker.core.entity;
 
-import com.hbsites.hbsitescommons.dto.CharacterSheetListingDTO;
-import com.hbsites.hbsitescommons.dto.UserDTO;
-import com.hbsites.hbsitescommons.entity.RabbitBaseEntity;
-import com.hbsites.hbsitescommons.enumeration.ETRPGSystem;
-import com.hbsites.hbsitescommons.interfaces.EventProducerInterface;
+import com.hbsites.hbsitescommons.commons.entity.RabbitBaseEntity;
+import com.hbsites.hbsitescommons.rpgtracker.enumeration.ETRPGSystem;
+import com.hbsites.hbsitescommons.commons.interfaces.EventProducerInterface;
+import com.hbsites.hbsitescommons.rpgtracker.dto.CharacterSheetListingDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,7 +18,6 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import org.apache.commons.lang3.NotImplementedException;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data

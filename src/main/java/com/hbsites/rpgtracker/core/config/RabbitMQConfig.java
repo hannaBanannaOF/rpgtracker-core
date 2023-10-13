@@ -1,6 +1,6 @@
 package com.hbsites.rpgtracker.core.config;
 
-import com.hbsites.hbsitescommons.queues.RabbitQueues;
+import com.hbsites.hbsitescommons.commons.queues.RabbitQueues;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;

@@ -1,10 +1,10 @@
 package com.hbsites.rpgtracker.core.controller;
 
-import com.hbsites.hbsitescommons.config.ApiVersion;
-import com.hbsites.hbsitescommons.dto.CharacterSheetBasicInfoDTO;
-import com.hbsites.hbsitescommons.dto.CharacterSheetListingDTO;
-import com.hbsites.hbsitescommons.dto.SessionBasicInfoDTO;
-import com.hbsites.hbsitescommons.utils.UserUtils;
+import com.hbsites.hbsitescommons.commons.config.ApiVersion;
+import com.hbsites.hbsitescommons.rpgtracker.dto.CharacterSheetBasicInfoDTO;
+import com.hbsites.hbsitescommons.rpgtracker.dto.CharacterSheetListingDTO;
+import com.hbsites.hbsitescommons.rpgtracker.dto.SessionBasicInfoDTO;
+import com.hbsites.hbsitescommons.commons.utils.UserUtils;
 import com.hbsites.rpgtracker.core.dto.BasicSessionListingDTO;
 import com.hbsites.rpgtracker.core.dto.ConfigDTO;
 import com.hbsites.rpgtracker.core.entity.SessionEntity;

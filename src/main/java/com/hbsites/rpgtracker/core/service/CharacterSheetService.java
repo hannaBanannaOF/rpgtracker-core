@@ -1,8 +1,8 @@
 package com.hbsites.rpgtracker.core.service;
 
-import com.hbsites.hbsitescommons.dto.CharacterSheetBasicInfoDTO;
-import com.hbsites.hbsitescommons.dto.CharacterSheetListingDTO;
-import com.hbsites.hbsitescommons.utils.UserUtils;
+import com.hbsites.hbsitescommons.commons.utils.UserUtils;
+import com.hbsites.hbsitescommons.rpgtracker.dto.CharacterSheetBasicInfoDTO;
+import com.hbsites.hbsitescommons.rpgtracker.dto.CharacterSheetListingDTO;
 import com.hbsites.rpgtracker.core.entity.SessionEntity;
 import com.hbsites.rpgtracker.core.repository.CharacterSheetRepository;
 import org.springframework.beans.factory.annotation.Autowired;

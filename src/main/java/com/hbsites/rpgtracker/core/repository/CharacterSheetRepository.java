@@ -1,6 +1,6 @@
 package com.hbsites.rpgtracker.core.repository;
 
-import com.hbsites.hbsitescommons.enumeration.ETRPGSystem;
+import com.hbsites.hbsitescommons.rpgtracker.enumeration.ETRPGSystem;
 import com.hbsites.rpgtracker.core.entity.CharacterSheetEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

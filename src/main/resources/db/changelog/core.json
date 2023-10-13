@@ -29,7 +29,7 @@
                       "primaryKey": true,
                       "nullable": false
                     },
-                    "defaultValueComputed": "gen_random_uuid()"
+                    "defaultValueComputed": "${uuid_function.value}"
                   }
                 },
                 {
@@ -129,7 +129,7 @@
                       "primaryKey": true,
                       "nullable": false
                     },
-                    "defaultValueComputed": "gen_random_uuid()"
+                    "defaultValueComputed": "${uuid_function.value}"
                   }
                 },
                 {

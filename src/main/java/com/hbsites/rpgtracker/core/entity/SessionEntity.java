@@ -1,9 +1,8 @@
 package com.hbsites.rpgtracker.core.entity;
 
-import com.hbsites.hbsitescommons.dto.UserDTO;
-import com.hbsites.hbsitescommons.entity.RabbitBaseEntity;
-import com.hbsites.hbsitescommons.enumeration.ETRPGSystem;
-import com.hbsites.hbsitescommons.interfaces.EventProducerInterface;
+import com.hbsites.hbsitescommons.commons.entity.RabbitBaseEntity;
+import com.hbsites.hbsitescommons.rpgtracker.enumeration.ETRPGSystem;
+import com.hbsites.hbsitescommons.commons.interfaces.EventProducerInterface;
 import com.hbsites.rpgtracker.core.dto.BasicSessionListingDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Data
 @Entity

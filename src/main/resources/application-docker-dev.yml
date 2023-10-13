@@ -3,7 +3,7 @@ spring:
     hikari:
       connectionTimeout: "20000"
       maximumPoolSize: "5"
-    url: "jdbc:postgresql://localhost:5433/rpgtracker-core?currentSchema=public"
+    url: "jdbc:postgresql://rpgtracker-core-db:5432/rpgtracker-core?currentSchema=public"
     username: "postgres"
     password: "postgres"
     driver-class-name: "org.postgresql.Driver"
@@ -13,15 +13,16 @@ spring:
       uuid_function:
         name: "uuid_function"
         value: "gen_random_uuid()"
+
   jpa:
-    show-sql: "true"
+    show-sql: "false"
   security:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: "http://localhost:8083/realms/HBsites/protocol/openid-connect/certs"
+          jwk-set-uri: "http://keycloak:8080/realms/HBsites/protocol/openid-connect/certs"
   rabbitmq:
-    host: "localhost"
+    host: "rabbitmq"
     port: "5672"
     username: "rpgtracker-core"
     password: "rpgtracker-core"

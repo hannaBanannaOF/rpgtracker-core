@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    hikari:
+      connectionTimeout: "20000"
+      maximumPoolSize: "5"
+    url: "jdbc:h2:~/testcoredb;DB_CLOSE_ON_EXIT=FALSE"
+    username: "sa"
+    password: ""
+    driver-class-name: "org.h2.Driver"
+  liquibase:
+    change-log: "classpath:db/master-core.json"
+    parameters:
+      uuid_function:
+        name: "uuid_function"
+        value: "random_uuid()"
+  jpa:
+    show-sql: "true"
+server:
+  port: "8081"
