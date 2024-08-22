@@ -7,8 +7,8 @@ import lombok.Getter;
 import java.util.UUID;
 
 @Getter
-public class SessionParams extends DefaultParams {
+public class CharacterSheetParams extends DefaultParams {
 
-    @PathParam("sessionId")
-    UUID sessionId;
+    @PathParam("sheetId")
+    UUID sheetId;
 }

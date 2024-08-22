@@ -5,7 +5,7 @@ import com.hbsites.commons.domain.params.DefaultParams;
 import com.hbsites.rpgtracker.application.service.CharacterSheetService;
 import com.hbsites.rpgtracker.application.service.SessionService;
 import com.hbsites.rpgtracker.domain.dto.BasicSessionListDTO;
-import com.hbsites.rpgtracker.domain.params.SessionParams;
+import com.hbsites.rpgtracker.domain.params.SessionListParams;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -30,7 +30,7 @@ public class MeResource {
     @GET
     @Path("/sessions")
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<List<BasicSessionListDTO>> getDMedSessions(@BeanParam SessionParams params) {
+    public Uni<List<BasicSessionListDTO>> getDMedSessions(@BeanParam SessionListParams params) {
         return sessionService.getMySessions(params);
     }
 

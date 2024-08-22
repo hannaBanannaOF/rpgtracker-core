@@ -24,7 +24,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-smallrye-reactive-messaging-rabbitmq'
     implementation 'io.quarkus:quarkus-oidc'
     implementation 'io.quarkus:quarkus-keycloak-authorization'
-    implementation 'io.quarkus:quarkus-hibernate-reactive-panache'
+
     implementation 'io.quarkus:quarkus-reactive-pg-client'
     implementation 'io.quarkus:quarkus-liquibase'
     implementation 'io.quarkus:quarkus-jdbc-postgresql'
@@ -32,8 +32,8 @@ dependencies {
     implementation 'io.quarkus:quarkus-smallrye-health'
     implementation 'com.orbitz.consul:consul-client:1.5.3'
 
-    implementation 'com.hbsites.commons:commons-general:1.0.16-SNAPSHOT'
-    implementation 'com.hbsites.commons:commons-rpgtracker:1.0.4-SNAPSHOT'
+    implementation 'com.hbsites.commons:commons-general:1.0.23-SNAPSHOT'
+    implementation 'com.hbsites.commons:commons-rpgtracker:1.0.8-SNAPSHOT'
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
@@ -43,6 +43,10 @@ dependencies {
 
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    annotationProcessor("org.seasar.doma:doma-processor:2.60.0")
+    implementation("org.seasar.doma:doma-core:2.60.0")
+    implementation("io.quarkiverse.doma:quarkus-doma:0.0.9")
 }
 
 group 'com.hbsites.rpgtracker'
@@ -58,7 +62,7 @@ test {
 }
 compileJava {
     options.encoding = 'UTF-8'
-    options.compilerArgs << '-parameters'
+    options.compilerArgs << '-Adoma.domain.converters=com.hbsites.rpgtracker.infrastructure.provider.DomainConvertersProvider'
 }
 
 compileTestJava {
