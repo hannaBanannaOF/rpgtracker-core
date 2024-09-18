@@ -1,7 +1,7 @@
 {
   "databaseChangeLog": [
     {
-      "include": {"file" : "/changelog/core.json", "relativeToChangelogFile": true}
+      "includeAll": {"path" : "/changelog", "relativeToChangelogFile": true}
     }
   ]
 }

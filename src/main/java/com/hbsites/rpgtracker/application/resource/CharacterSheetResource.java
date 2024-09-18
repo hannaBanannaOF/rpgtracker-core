@@ -1,6 +1,7 @@
 package com.hbsites.rpgtracker.application.resource;
 
-import com.hbsites.rpgtracker.application.service.CharacterSheetService;
+import com.hbsites.rpgtracker.application.service.adapters.CharacterSheetAdapter;
+import com.hbsites.rpgtracker.application.service.v1.CharacterSheetServiceV1;
 import com.hbsites.rpgtracker.domain.dto.CharacterSheetDetailsDTO;
 import com.hbsites.rpgtracker.domain.params.CharacterSheetParams;
 import com.hbsites.rpgtracker.infrastructure.interceptors.PermittedSheet;
@@ -18,12 +19,12 @@ import jakarta.ws.rs.core.MediaType;
 public class CharacterSheetResource {
 
     @Inject
-    CharacterSheetService characterSheetService;
+    CharacterSheetAdapter characterSheetAdapter;
 
     @GET
     @Path("/{sheetId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<CharacterSheetDetailsDTO> getDMedSessions(@BeanParam @PermittedSheet CharacterSheetParams params) {
-        return characterSheetService.findSheetById(params);
+        return characterSheetAdapter.findSheetById(params);
     }
 }

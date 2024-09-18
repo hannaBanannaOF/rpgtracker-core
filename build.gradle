@@ -32,8 +32,8 @@ dependencies {
     implementation 'io.quarkus:quarkus-smallrye-health'
     implementation 'com.orbitz.consul:consul-client:1.5.3'
 
-    implementation 'com.hbsites.commons:commons-general:1.0.23-SNAPSHOT'
-    implementation 'com.hbsites.commons:commons-rpgtracker:1.0.8-SNAPSHOT'
+    implementation 'com.hbsites.commons:commons-general:1.0.29-SNAPSHOT'
+    implementation 'com.hbsites.commons:commons-rpgtracker:1.0.9-SNAPSHOT'
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'

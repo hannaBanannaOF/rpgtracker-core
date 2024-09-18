@@ -1,0 +1,87 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "preConditions": [
+          {
+            "onFail": "MARK_RAN",
+            "not": [
+              {
+                "tableExists": {
+                  "tableName": "session_calendar"
+                }
+              }
+            ]
+          },
+          {
+            "tableExists": {
+              "tableName": "session"
+            }
+          }
+        ],
+        "id": "202408230935",
+        "author": "HannaBananna",
+        "changes": [
+          {
+            "createTable": {
+              "tableName": "session_calendar",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "uuid",
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    },
+                    "defaultValueComputed": "gen_random_uuid()"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "session_id",
+                    "type": "uuid",
+                    "constraints": {
+                      "foreignKeyName": "fk_session_session_calendar",
+                      "references": "session(id)"
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "session_date",
+                    "type": "timestamp",
+                    "constraints": {
+                      "nullable": false
+                    },
+                    "defaultValueDate": "current_timestamp"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "create_date",
+                    "type": "timestamp",
+                    "constraints": {
+                      "nullable": false
+                    },
+                    "defaultValueDate": "current_timestamp"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "update_date",
+                    "type": "timestamp",
+                    "constraints": {
+                      "nullable": false
+                    },
+                    "defaultValueDate": "current_timestamp"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,10 +1,12 @@
 package com.hbsites.rpgtracker.application.resource;
 
-import com.hbsites.commons.domain.dto.BasicListDTO;
 import com.hbsites.commons.domain.params.DefaultParams;
-import com.hbsites.rpgtracker.application.service.CharacterSheetService;
-import com.hbsites.rpgtracker.application.service.SessionService;
+import com.hbsites.rpgtracker.application.service.adapters.CharacterSheetAdapter;
+import com.hbsites.rpgtracker.application.service.adapters.SessionServiceAdapter;
+import com.hbsites.rpgtracker.domain.dto.BasicCharacterSheetListDTO;
 import com.hbsites.rpgtracker.domain.dto.BasicSessionListDTO;
+import com.hbsites.rpgtracker.domain.dto.NextSessionsDTO;
+import com.hbsites.rpgtracker.domain.params.SessionCalendarParams;
 import com.hbsites.rpgtracker.domain.params.SessionListParams;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
@@ -22,22 +24,36 @@ import java.util.List;
 public class MeResource {
 
     @Inject
-    SessionService sessionService;
+    SessionServiceAdapter sessionServiceAdapter;
 
     @Inject
-    CharacterSheetService characterSheetService;
+    CharacterSheetAdapter characterSheetAdapter;
 
     @GET
     @Path("/sessions")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<List<BasicSessionListDTO>> getDMedSessions(@BeanParam SessionListParams params) {
-        return sessionService.getMySessions(params);
+        return sessionServiceAdapter.getMySessions(params);
+    }
+
+    @GET
+    @Path("/sessions/calendar")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Uni<List<NextSessionsDTO>> getMyNextSessions(@BeanParam SessionCalendarParams params) {
+        return sessionServiceAdapter.getMySessionCalendar(params);
+    }
+
+    @GET
+    @Path("/sessions/next")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Uni<NextSessionsDTO> getMyNextSessions(@BeanParam SessionListParams params) {
+        return sessionServiceAdapter.getMyNextSession(params);
     }
 
     @GET
     @Path("/sheets")
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<List<BasicListDTO>> getMyCharacterSheets(@BeanParam DefaultParams params) {
-        return characterSheetService.getCurrentUserSheets(params);
+    public Uni<List<BasicCharacterSheetListDTO>> getMyCharacterSheets(@BeanParam DefaultParams params) {
+        return characterSheetAdapter.getCurrentUserSheets(params);
     }
 }

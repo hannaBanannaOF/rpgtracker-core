@@ -7,7 +7,6 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @SuperBuilder
-public class BasicSessionListDTO extends BasicListDTO {
-    private final boolean dmed;
+public class BasicCharacterSheetListDTO extends BasicListDTO {
     private final ETRPGSystem system;
 }
