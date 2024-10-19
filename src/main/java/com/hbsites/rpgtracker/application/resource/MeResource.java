@@ -56,4 +56,11 @@ public class MeResource {
     public Uni<List<BasicCharacterSheetListDTO>> getMyCharacterSheets(@BeanParam DefaultParams params) {
         return characterSheetAdapter.getCurrentUserSheets(params);
     }
+
+    @GET
+    @Path("/hello")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Uni<String> greet(){
+        return Uni.createFrom().item(() -> "Hello from service 1");
+    }
 }
