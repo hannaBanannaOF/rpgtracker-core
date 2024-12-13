@@ -1,8 +1,7 @@
 package com.hbsites.rpgtracker.application.resource;
 
 import com.hbsites.rpgtracker.application.service.adapters.CharacterSheetAdapter;
-import com.hbsites.rpgtracker.application.service.v1.CharacterSheetServiceV1;
-import com.hbsites.rpgtracker.domain.dto.CharacterSheetDetailsDTO;
+import com.hbsites.rpgtracker.domain.model.CharacterSheetDetailsItem;
 import com.hbsites.rpgtracker.domain.params.CharacterSheetParams;
 import com.hbsites.rpgtracker.infrastructure.interceptors.PermittedSheet;
 import io.smallrye.mutiny.Uni;
@@ -22,9 +21,9 @@ public class CharacterSheetResource {
     CharacterSheetAdapter characterSheetAdapter;
 
     @GET
-    @Path("/{sheetId}")
+    @Path("/{slug}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<CharacterSheetDetailsDTO> getDMedSessions(@BeanParam @PermittedSheet CharacterSheetParams params) {
-        return characterSheetAdapter.findSheetById(params);
+    public Uni<CharacterSheetDetailsItem> findSheetBySlug(@BeanParam @PermittedSheet CharacterSheetParams params) {
+        return characterSheetAdapter.findSheetBySlug(params);
     }
 }

@@ -3,9 +3,9 @@ package com.hbsites.rpgtracker.application.service.adapters;
 import com.hbsites.commons.domain.service.VersionedService;
 import com.hbsites.rpgtracker.application.service.interfaces.SessionService;
 import com.hbsites.rpgtracker.application.service.v1.SessionServiceV1;
-import com.hbsites.rpgtracker.domain.dto.BasicSessionListDTO;
-import com.hbsites.rpgtracker.domain.dto.NextSessionsDTO;
-import com.hbsites.rpgtracker.domain.dto.SessionDetailsDTO;
+import com.hbsites.rpgtracker.domain.model.SessionListItem;
+import com.hbsites.rpgtracker.domain.model.NextSessionItem;
+import com.hbsites.rpgtracker.domain.model.SessionDetailsItem;
 import com.hbsites.rpgtracker.domain.params.SessionCalendarParams;
 import com.hbsites.rpgtracker.domain.params.SessionListParams;
 import com.hbsites.rpgtracker.domain.params.SessionParams;
@@ -22,23 +22,23 @@ public class SessionServiceAdapter extends VersionedService<SessionService> impl
     SessionServiceV1 sessionServiceV1;
 
     @Override
-    public Uni<List<BasicSessionListDTO>> getMySessions(SessionListParams params) {
+    public Uni<List<SessionListItem>> getMySessions(SessionListParams params) {
         return getServiceByApiVersion(params.getApiVersion()).getMySessions(params);
     }
 
     @Override
-    public Uni<SessionDetailsDTO> findSessionById(SessionParams params) {
-        return null;
+    public Uni<SessionDetailsItem> findSessionBySlug(SessionParams params) {
+        return getServiceByApiVersion(params.getApiVersion()).findSessionBySlug(params);
     }
 
     @Override
-    public Uni<List<NextSessionsDTO>> getMySessionCalendar(SessionCalendarParams params) {
-        return null;
+    public Uni<List<NextSessionItem>> getMySessionCalendar(SessionCalendarParams params) {
+        return getServiceByApiVersion(params.getApiVersion()).getMySessionCalendar(params);
     }
 
     @Override
-    public Uni<NextSessionsDTO> getMyNextSession(SessionListParams params) {
-        return null;
+    public Uni<NextSessionItem> getMyNextSession(SessionListParams params) {
+        return getServiceByApiVersion(params.getApiVersion()).getMyNextSession(params);
     }
 
     @Override

@@ -1,18 +1,15 @@
 package com.hbsites.rpgtracker.infrastructure.repository;
 
-import com.hbsites.rpgtracker.infrastructure.entity.CharacterSheetEntity;
-import com.hbsites.rpgtracker.infrastructure.entity.CharacterSheetEntity_;
-import com.hbsites.rpgtracker.infrastructure.entity.SessionEntity_;
+import com.hbsites.rpgtracker.infrastructure.database.entity.CharacterSheetEntity;
+import com.hbsites.rpgtracker.infrastructure.database.entity.CharacterSheetEntity_;
+import com.hbsites.rpgtracker.infrastructure.database.entity.SessionEntity_;
 import com.hbsites.rpgtracker.infrastructure.repository.interfaces.CharacterSheetRepository;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.seasar.doma.jdbc.criteria.NativeSql;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -28,23 +25,30 @@ public class CharacterSheetRepositoryImpl implements CharacterSheetRepository {
     }
 
     @Override
-    public Uni<CharacterSheetEntity> findOne(UUID sheetId) {
+    public Uni<CharacterSheetEntity> findOneBySlug(String slug) {
         CharacterSheetEntity_ characterSheetEntity = new CharacterSheetEntity_();
-        return Uni.createFrom().item(() -> nativeSql.from(characterSheetEntity).where(c -> c.eq(characterSheetEntity.id, sheetId)).fetchOne());
+        return Uni.createFrom().item(() -> nativeSql.from(characterSheetEntity).where(c -> c.eq(characterSheetEntity.slug, slug)).fetchOne());
     }
 
     @Override
-    public Uni<List<UUID>> findAllCharacterSheetIdByPlayerId(UUID playerId) {
+    public Uni<List<CharacterSheetEntity>> findAllBySessionSlug(String slug) {
         CharacterSheetEntity_ characterSheetEntity = new CharacterSheetEntity_();
-        return Uni.createFrom().item(() -> nativeSql.from(characterSheetEntity).where(c -> c.eq(characterSheetEntity.playerId, playerId))
-            .selectAsRow(characterSheetEntity.id).stream().map(r -> r.get(characterSheetEntity.id))
-            .toList()
-        );
+        SessionEntity_ sessionEntity = new SessionEntity_();
+        return Uni.createFrom().item(() -> nativeSql.from(characterSheetEntity)
+                .leftJoin(sessionEntity, on -> on.eq(sessionEntity.id, characterSheetEntity.sessionId))
+                .where(c -> c.eq(sessionEntity.slug, slug)).fetch());
     }
 
     @Override
-    public Uni<List<CharacterSheetEntity>> findAllBySessionId(UUID sessionId) {
+    public Uni<Boolean> userCanSee(UUID userId, String slug) {
         CharacterSheetEntity_ characterSheetEntity = new CharacterSheetEntity_();
-        return Uni.createFrom().item(() -> nativeSql.from(characterSheetEntity).where(c -> c.eq(characterSheetEntity.sessionId, sessionId)).fetch());
+        SessionEntity_ sessionEntity = new SessionEntity_();
+        return Uni.createFrom().item(() -> nativeSql.from(characterSheetEntity)
+                .leftJoin(sessionEntity, on -> on.eq(sessionEntity.id, characterSheetEntity.sessionId))
+                .where(c -> {
+                    c.eq(characterSheetEntity.slug, slug);
+                    c.eq(characterSheetEntity.playerId, userId);
+                    c.or(() -> c.eq(sessionEntity.dmId, userId));
+                }).stream().findAny().isPresent());
     }
 }

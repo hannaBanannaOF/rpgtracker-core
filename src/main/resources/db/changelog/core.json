@@ -24,12 +24,12 @@
                 {
                   "column": {
                     "name": "id",
-                    "type": "uuid",
+                    "type": "bigint",
+                    "autoIncrement": true,
                     "constraints": {
                       "primaryKey": true,
                       "nullable": false
-                    },
-                    "defaultValueComputed": "gen_random_uuid()"
+                    }
                   }
                 },
                 {
@@ -71,22 +71,11 @@
                 },
                 {
                   "column": {
-                    "name": "create_date",
-                    "type": "timestamp",
+                    "name": "slug",
+                    "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
-                    },
-                    "defaultValueDate": "current_timestamp"
-                  }
-                },
-                {
-                  "column": {
-                    "name": "update_date",
-                    "type": "timestamp",
-                    "constraints": {
-                      "nullable": false
-                    },
-                    "defaultValueDate": "current_timestamp"
+                    }
                   }
                 }
               ]
@@ -124,12 +113,12 @@
                 {
                   "column": {
                     "name": "id",
-                    "type": "uuid",
+                    "type": "bigint",
+                    "autoIncrement": true,
                     "constraints": {
                       "primaryKey": true,
                       "nullable": false
-                    },
-                    "defaultValueComputed": "gen_random_uuid()"
+                    }
                   }
                 },
                 {
@@ -153,7 +142,7 @@
                 {
                   "column": {
                     "name": "session_id",
-                    "type": "uuid",
+                    "type": "bigint",
                     "constraints": {
                       "foreignKeyName": "fk_session_character_sheet",
                       "references": "session(id)"
@@ -171,22 +160,11 @@
                 },
                 {
                   "column": {
-                    "name": "create_date",
-                    "type": "timestamp",
+                    "name": "slug",
+                    "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
-                    },
-                    "defaultValueDate": "current_timestamp"
-                  }
-                },
-                {
-                  "column": {
-                    "name": "update_date",
-                    "type": "timestamp",
-                    "constraints": {
-                      "nullable": false
-                    },
-                    "defaultValueDate": "current_timestamp"
+                    }
                   }
                 }
               ]

@@ -9,6 +9,6 @@ import java.util.UUID;
 @Getter
 public class CharacterSheetParams extends DefaultParams {
 
-    @PathParam("sheetId")
-    UUID sheetId;
+    @PathParam("slug")
+    String slug;
 }

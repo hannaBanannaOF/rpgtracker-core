@@ -1,7 +1,7 @@
 package com.hbsites.rpgtracker.application.resource;
 
 import com.hbsites.rpgtracker.application.service.adapters.SessionServiceAdapter;
-import com.hbsites.rpgtracker.domain.dto.SessionDetailsDTO;
+import com.hbsites.rpgtracker.domain.model.SessionDetailsItem;
 import com.hbsites.rpgtracker.domain.params.SessionParams;
 import com.hbsites.rpgtracker.infrastructure.interceptors.PermittedSession;
 import io.smallrye.mutiny.Uni;
@@ -20,9 +20,9 @@ public class SessionResource {
     SessionServiceAdapter sessionServiceAdapter;
 
     @GET
-    @Path("/{sessionId}")
+    @Path("/{slug}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<SessionDetailsDTO> getDMedSessions(@BeanParam @PermittedSession SessionParams params) {
-        return sessionServiceAdapter.findSessionById(params);
+    public Uni<SessionDetailsItem> getSessionBySlug(@BeanParam @PermittedSession SessionParams params) {
+        return sessionServiceAdapter.findSessionBySlug(params);
     }
 }

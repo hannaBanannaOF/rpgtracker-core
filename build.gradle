@@ -30,10 +30,10 @@ dependencies {
     implementation 'io.quarkus:quarkus-jdbc-postgresql'
     implementation 'io.smallrye.reactive:smallrye-mutiny-vertx-consul-client'
     implementation 'io.quarkus:quarkus-smallrye-health'
-    implementation 'com.orbitz.consul:consul-client:1.5.3'
+    implementation 'com.github.slugify:slugify:3.0.7'
 
-    implementation 'com.hbsites.commons:commons-general:1.0.32-SNAPSHOT'
-    implementation 'com.hbsites.commons:commons-rpgtracker:1.0.9-SNAPSHOT'
+    implementation "com.hbsites.commons:commons-general:${commonsGeneralVersion}"
+    implementation "com.hbsites.commons:commons-rpgtracker:${commonsRPGTrackerVersion}"
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'

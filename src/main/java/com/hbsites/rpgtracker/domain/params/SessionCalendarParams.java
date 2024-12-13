@@ -10,4 +10,7 @@ public class SessionCalendarParams extends SessionListParams {
 
     @QueryParam("month")
     private Integer month = LocalDateTime.now().getMonthValue();
+
+    @QueryParam("year")
+    private Integer year = LocalDateTime.now().getYear();
 }

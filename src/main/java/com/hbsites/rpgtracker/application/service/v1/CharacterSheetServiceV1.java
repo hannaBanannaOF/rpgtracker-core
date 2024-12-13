@@ -2,8 +2,8 @@ package com.hbsites.rpgtracker.application.service.v1;
 
 import com.hbsites.commons.domain.params.DefaultParams;
 import com.hbsites.rpgtracker.application.service.interfaces.CharacterSheetService;
-import com.hbsites.rpgtracker.domain.dto.BasicCharacterSheetListDTO;
-import com.hbsites.rpgtracker.domain.dto.CharacterSheetDetailsDTO;
+import com.hbsites.rpgtracker.domain.model.CharacterSheetListItem;
+import com.hbsites.rpgtracker.domain.model.CharacterSheetDetailsItem;
 import com.hbsites.rpgtracker.domain.params.CharacterSheetParams;
 import com.hbsites.rpgtracker.infrastructure.repository.CharacterSheetRepositoryImpl;
 import io.smallrye.mutiny.Uni;
@@ -23,26 +23,19 @@ public class CharacterSheetServiceV1 implements CharacterSheetService {
     @Inject
     JsonWebToken token;
 
-    public Uni<List<BasicCharacterSheetListDTO>> getCurrentUserSheets(DefaultParams params) {
+    public Uni<List<CharacterSheetListItem>> getCurrentUserSheets(DefaultParams params) {
         return characterSheetRepository.findAllByPlayerId(UUID.fromString(token.getSubject()))
                 .onItem()
                 .transform(characterSheetEntities ->
-                        characterSheetEntities.stream().<BasicCharacterSheetListDTO>map(characterSheetEntity ->
-                                BasicCharacterSheetListDTO.builder()
-                                        .uuid(characterSheetEntity.getId())
-                                        .description(characterSheetEntity.getCharacterName())
-                                        .system(characterSheetEntity.getTrpgSystem())
-                                        .build()
+                        characterSheetEntities.stream().<CharacterSheetListItem>map(characterSheetEntity ->
+                                new CharacterSheetListItem(characterSheetEntity.slug(), characterSheetEntity.characterName(), characterSheetEntity.trpgSystem())
                         ).toList()
                 );
     }
 
-    public Uni<CharacterSheetDetailsDTO> findSheetById(CharacterSheetParams params) {
-        return characterSheetRepository.findOne(params.getSheetId()).onItem().transform(res -> CharacterSheetDetailsDTO
-                .builder()
-                .id(res.getId())
-                .characterName(res.getCharacterName())
-                .build()
+    public Uni<CharacterSheetDetailsItem> findSheetBySlug(CharacterSheetParams params) {
+        return characterSheetRepository.findOneBySlug(params.getSlug()).onItem().transform(res ->
+                new CharacterSheetDetailsItem(res.slug(), res.characterName())
         );
     }
 }

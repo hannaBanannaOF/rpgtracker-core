@@ -1,10 +1,10 @@
 package com.hbsites.rpgtracker.application.service.v1;
 
-import com.hbsites.commons.domain.dto.BasicListDTO;
+import com.hbsites.commons.domain.model.BasicListItem;
 import com.hbsites.rpgtracker.application.service.interfaces.SessionService;
-import com.hbsites.rpgtracker.domain.dto.BasicSessionListDTO;
-import com.hbsites.rpgtracker.domain.dto.NextSessionsDTO;
-import com.hbsites.rpgtracker.domain.dto.SessionDetailsDTO;
+import com.hbsites.rpgtracker.domain.model.NextSessionItem;
+import com.hbsites.rpgtracker.domain.model.SessionDetailsItem;
+import com.hbsites.rpgtracker.domain.model.SessionListItem;
 import com.hbsites.rpgtracker.domain.params.SessionCalendarParams;
 import com.hbsites.rpgtracker.domain.params.SessionListParams;
 import com.hbsites.rpgtracker.domain.params.SessionParams;
@@ -33,50 +33,39 @@ public class SessionServiceV1 implements SessionService {
     JsonWebToken token;
 
     @Override
-    public Uni<List<BasicSessionListDTO>> getMySessions(SessionListParams params) {
+    public Uni<List<SessionListItem>> getMySessions(SessionListParams params) {
         UUID userId = UUID.fromString(token.getSubject());
         return sessionRepository.findAllByPlayerIdOrDmId(userId, params.getDmedFilter())
                 .onItem()
                 .transform(sessionEntities ->
-                        sessionEntities.stream().<BasicSessionListDTO>map(sessionEntity -> BasicSessionListDTO.builder()
-                                .uuid(sessionEntity.getSessionId())
-                                .description(sessionEntity.getSessionName())
-                                .dmed(sessionEntity.getDmId().equals(userId))
-                                .system(sessionEntity.getTrpgSystem())
-                                .build()
+                        sessionEntities.stream().<SessionListItem>map(sessionEntity ->
+                                new SessionListItem(sessionEntity.slug(), sessionEntity.sessionName(), sessionEntity.dmId().equals(userId), sessionEntity.trpgSystem())
                         ).toList()
                 );
     }
 
     @Override
-    public Uni<SessionDetailsDTO> findSessionById(SessionParams params) {
-        return Uni.combine().all().unis(sessionRepository.findOneById(params.getSessionId()), characterSheetRepository.findAllBySessionId(params.getSessionId()))
+    public Uni<SessionDetailsItem> findSessionBySlug(SessionParams params) {
+        return Uni.combine().all().unis(sessionRepository.findOneBySlug(params.getSlug()), characterSheetRepository.findAllBySessionSlug(params.getSlug()))
                 .asTuple()
                 .onItem()
-                .transform(records -> SessionDetailsDTO.builder()
-                        .sessionName(records.getItem1().getSessionName())
-                        .id(records.getItem1().getDmId())
-                        .characterSheets(
-                                records.getItem2().stream().<BasicListDTO>map(sheet -> BasicListDTO.builder()
-                                        .uuid(sheet.getId())
-                                        .description(sheet.getCharacterName())
-                                        .build()
-                                ).toList()
-                        )
-                        .build()
+                .transform(records ->
+                        new SessionDetailsItem(records.getItem1().slug(), records.getItem1().sessionName(), records.getItem2().stream().map(sheet ->
+                                new BasicListItem<>(sheet.slug(), sheet.characterName())
+                        ).toList())
                 );
     }
 
     @Override
-    public Uni<List<NextSessionsDTO>> getMySessionCalendar(SessionCalendarParams params) {
-        YearMonth yearMonth = YearMonth.from(LocalDateTime.now()).withMonth(params.getMonth());
+    public Uni<List<NextSessionItem>> getMySessionCalendar(SessionCalendarParams params) {
+        YearMonth yearMonth = YearMonth.of(params.getYear(), params.getMonth());
         LocalDateTime startOfMonth = yearMonth.atDay(1).atStartOfDay();
         LocalDateTime endOfMonth = yearMonth.atEndOfMonth().atTime(23, 59,59);
         return sessionRepository.findAllByDmIdOrPlayerIdWithDateRange(UUID.fromString(token.getSubject()), startOfMonth, endOfMonth, false, params.getDmedFilter());
     }
 
     @Override
-    public Uni<NextSessionsDTO> getMyNextSession(SessionListParams params) {
+    public Uni<NextSessionItem> getMyNextSession(SessionListParams params) {
         return sessionRepository.findAllByDmIdOrPlayerIdWithDateRange(UUID.fromString(token.getSubject()), LocalDateTime.now(), null, true, params.getDmedFilter())
                 .onItem()
                 .transform(res -> {

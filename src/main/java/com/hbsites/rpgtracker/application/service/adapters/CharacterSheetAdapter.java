@@ -4,8 +4,8 @@ import com.hbsites.commons.domain.params.DefaultParams;
 import com.hbsites.commons.domain.service.VersionedService;
 import com.hbsites.rpgtracker.application.service.interfaces.CharacterSheetService;
 import com.hbsites.rpgtracker.application.service.v1.CharacterSheetServiceV1;
-import com.hbsites.rpgtracker.domain.dto.BasicCharacterSheetListDTO;
-import com.hbsites.rpgtracker.domain.dto.CharacterSheetDetailsDTO;
+import com.hbsites.rpgtracker.domain.model.CharacterSheetListItem;
+import com.hbsites.rpgtracker.domain.model.CharacterSheetDetailsItem;
 import com.hbsites.rpgtracker.domain.params.CharacterSheetParams;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,12 +27,12 @@ public class CharacterSheetAdapter extends VersionedService<CharacterSheetServic
     }
 
     @Override
-    public Uni<List<BasicCharacterSheetListDTO>> getCurrentUserSheets(DefaultParams params) {
+    public Uni<List<CharacterSheetListItem>> getCurrentUserSheets(DefaultParams params) {
         return getServiceByApiVersion(params.getApiVersion()).getCurrentUserSheets(params);
     }
 
     @Override
-    public Uni<CharacterSheetDetailsDTO> findSheetById(CharacterSheetParams params) {
-        return getServiceByApiVersion(params.getApiVersion()).findSheetById(params);
+    public Uni<CharacterSheetDetailsItem> findSheetBySlug(CharacterSheetParams params) {
+        return getServiceByApiVersion(params.getApiVersion()).findSheetBySlug(params);
     }
 }
