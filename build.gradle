@@ -17,6 +17,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'io.quarkus:quarkus-container-image-docker'
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-resteasy-reactive'
@@ -28,8 +29,6 @@ dependencies {
     implementation 'io.quarkus:quarkus-reactive-pg-client'
     implementation 'io.quarkus:quarkus-liquibase'
     implementation 'io.quarkus:quarkus-jdbc-postgresql'
-    implementation 'io.smallrye.reactive:smallrye-mutiny-vertx-consul-client'
-    implementation 'io.quarkus:quarkus-smallrye-health'
     implementation 'com.github.slugify:slugify:3.0.7'
 
     implementation "com.hbsites.commons:commons-general:${commonsGeneralVersion}"
@@ -44,8 +43,8 @@ dependencies {
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    annotationProcessor("org.seasar.doma:doma-processor:2.60.0")
-    implementation("org.seasar.doma:doma-core:2.60.0")
+    annotationProcessor("org.seasar.doma:doma-processor:3.0.1")
+    implementation("org.seasar.doma:doma-core:3.0.1")
     implementation("io.quarkiverse.doma:quarkus-doma:0.0.9")
 }
 

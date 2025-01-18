@@ -3,6 +3,7 @@ package com.hbsites.rpgtracker.infrastructure.repository;
 import com.hbsites.rpgtracker.domain.model.NextSessionItem;
 import com.hbsites.rpgtracker.domain.enumeration.DmedFilter;
 import com.hbsites.rpgtracker.infrastructure.database.entity.CharacterSheetEntity_;
+import com.hbsites.rpgtracker.infrastructure.database.entity.SessionCalendarEntity;
 import com.hbsites.rpgtracker.infrastructure.database.entity.SessionCalendarEntity_;
 import com.hbsites.rpgtracker.infrastructure.database.entity.SessionEntity;
 import com.hbsites.rpgtracker.infrastructure.database.entity.SessionEntity_;
@@ -10,6 +11,7 @@ import com.hbsites.rpgtracker.infrastructure.repository.interfaces.SessionReposi
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.seasar.doma.jdbc.criteria.Entityql;
 import org.seasar.doma.jdbc.criteria.NativeSql;
 import org.seasar.doma.jdbc.criteria.declaration.WhereDeclaration;
 import org.seasar.doma.jdbc.criteria.statement.NativeSqlSelectStarting;
@@ -26,6 +28,9 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Inject
     private NativeSql nativeSql;
+
+    @Inject
+    private Entityql entityql;
 
     @Override
     public Uni<List<SessionEntity>> findAllByPlayerIdOrDmId(UUID userId, DmedFilter filter) {
@@ -58,7 +63,6 @@ public class SessionRepositoryImpl implements SessionRepository {
                     c.le(sessionCalendarEntity.sessionDate, enddate);
                 }
                 c.ge(sessionCalendarEntity.sessionDate, startdate);
-                c.ge(sessionCalendarEntity.sessionDate, LocalDateTime.now());
                 c.and(() -> whereByDmedFilter(filter, c, sessionEntity, characterSheetEntity, userId));
             })
             .orderBy(o -> o.asc(sessionCalendarEntity.sessionDate));
@@ -75,16 +79,31 @@ public class SessionRepositoryImpl implements SessionRepository {
     }
 
     @Override
-    public Uni<Boolean> userCanSee(UUID userId, String slug) {
+    public Boolean userCanSee(UUID userId, String slug) {
         SessionEntity_ sessionEntity = new SessionEntity_();
         CharacterSheetEntity_ characterSheetEntity = new CharacterSheetEntity_();
-        return Uni.createFrom().item(() -> nativeSql.from(sessionEntity)
+        return nativeSql.from(sessionEntity)
                 .leftJoin(characterSheetEntity, on -> on.eq(characterSheetEntity.sessionId, sessionEntity.id))
                 .where(c -> {
                     c.eq(sessionEntity.slug, slug);
                     c.eq(sessionEntity.dmId, userId);
                     c.or(() -> c.eq(characterSheetEntity.playerId, userId));
-                }).stream().findAny().isPresent());
+                }).stream().findAny().isPresent();
+    }
+
+    @Override
+    public Uni<SessionEntity> updateInPlay(SessionEntity session) {
+        SessionEntity_ sessionEntity = new SessionEntity_();
+        SessionEntity e = new SessionEntity(session.id(), session.sessionName(), session.dmId(), !session.inPlay(), session.trpgSystem(), session.slug());
+        return Uni.createFrom().item(() -> entityql.update(sessionEntity, e).execute().getEntity());
+    }
+
+    @Override
+    public Uni<Void> scheduleSession(SessionEntity session, LocalDateTime dateTime) {
+        SessionCalendarEntity_ sessionCalendarEntity = new SessionCalendarEntity_();
+        SessionCalendarEntity e = new SessionCalendarEntity(null, session.id(), dateTime);
+        entityql.insert(sessionCalendarEntity, e).execute();
+        return Uni.createFrom().voidItem();
     }
 
     private void whereByDmedFilter(DmedFilter filter, WhereDeclaration c, SessionEntity_ sessionEntity, CharacterSheetEntity_ characterSheetEntity, UUID userId) {

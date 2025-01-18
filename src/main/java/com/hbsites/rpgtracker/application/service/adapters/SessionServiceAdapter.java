@@ -1,14 +1,15 @@
 package com.hbsites.rpgtracker.application.service.adapters;
 
+import com.hbsites.commons.domain.params.GetOneParams;
 import com.hbsites.commons.domain.service.VersionedService;
 import com.hbsites.rpgtracker.application.service.interfaces.SessionService;
 import com.hbsites.rpgtracker.application.service.v1.SessionServiceV1;
+import com.hbsites.rpgtracker.domain.model.ScheduleItem;
 import com.hbsites.rpgtracker.domain.model.SessionListItem;
 import com.hbsites.rpgtracker.domain.model.NextSessionItem;
 import com.hbsites.rpgtracker.domain.model.SessionDetailsItem;
 import com.hbsites.rpgtracker.domain.params.SessionCalendarParams;
 import com.hbsites.rpgtracker.domain.params.SessionListParams;
-import com.hbsites.rpgtracker.domain.params.SessionParams;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -27,7 +28,7 @@ public class SessionServiceAdapter extends VersionedService<SessionService> impl
     }
 
     @Override
-    public Uni<SessionDetailsItem> findSessionBySlug(SessionParams params) {
+    public Uni<SessionDetailsItem> findSessionBySlug(GetOneParams params) {
         return getServiceByApiVersion(params.getApiVersion()).findSessionBySlug(params);
     }
 
@@ -39,6 +40,16 @@ public class SessionServiceAdapter extends VersionedService<SessionService> impl
     @Override
     public Uni<NextSessionItem> getMyNextSession(SessionListParams params) {
         return getServiceByApiVersion(params.getApiVersion()).getMyNextSession(params);
+    }
+
+    @Override
+    public Uni<SessionDetailsItem> setSessionInPlay(GetOneParams params) {
+        return getServiceByApiVersion(params.getApiVersion()).setSessionInPlay(params);
+    }
+
+    @Override
+    public Uni<Void> scheduleSession(GetOneParams params, ScheduleItem schedule) {
+        return getServiceByApiVersion(params.getApiVersion()).scheduleSession(params, schedule);
     }
 
     @Override

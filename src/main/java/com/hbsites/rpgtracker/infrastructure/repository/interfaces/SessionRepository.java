@@ -17,5 +17,9 @@ public interface SessionRepository {
 
     Uni<List<NextSessionItem>> findAllByDmIdOrPlayerIdWithDateRange(UUID userId, LocalDateTime startdate, LocalDateTime enddate, boolean limitinOne, DmedFilter filter);
 
-    Uni<Boolean> userCanSee(UUID userId, String slug);
+    Boolean userCanSee(UUID userId, String slug);
+
+    Uni<SessionEntity> updateInPlay(SessionEntity session);
+
+    Uni<Void> scheduleSession(SessionEntity session, LocalDateTime dateTime);
 }

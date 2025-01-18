@@ -1,6 +1,6 @@
 package com.hbsites.rpgtracker.infrastructure.interceptors;
 
-import com.hbsites.rpgtracker.domain.params.CharacterSheetParams;
+import com.hbsites.commons.domain.params.GetOneParams;
 import com.hbsites.rpgtracker.infrastructure.repository.interfaces.CharacterSheetRepository;
 import io.quarkus.security.ForbiddenException;
 import jakarta.inject.Inject;
@@ -32,13 +32,11 @@ public class PermittedSheetInterceptor {
         Object[] parameters = context.getParameters();
         for (int i = 0; i < methodParameters.length; i++) {
             if ((methodParameters[i].getAnnotation(PermittedSheet.class) != null) &&
-                    parameters[i] instanceof CharacterSheetParams params) {
-                characterSheetRepository.userCanSee(user, params.getSlug()).onItem().transform(result -> {
-                    if (!result) {
-                        throw new ForbiddenException();
-                    }
-                    return null;
-                });
+                    parameters[i] instanceof GetOneParams params) {
+                boolean result = characterSheetRepository.userCanSee(user, params.getSlug());
+                if (!result) {
+                    throw new ForbiddenException();
+                }
                 break;
             }
         }

@@ -14,6 +14,8 @@ public interface CharacterSheetRepository {
 
     Uni<List<CharacterSheetEntity>> findAllBySessionSlug(String slug);
 
-    Uni<Boolean> userCanSee(UUID userId, String slug);
+    Uni<List<CharacterSheetEntity>> findAllBySessionSlugAndPlayerId(String slug, UUID playerId);
+
+    Boolean userCanSee(UUID userId, String slug);
 
 }

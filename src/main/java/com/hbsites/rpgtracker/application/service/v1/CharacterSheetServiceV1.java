@@ -1,10 +1,10 @@
 package com.hbsites.rpgtracker.application.service.v1;
 
 import com.hbsites.commons.domain.params.DefaultParams;
+import com.hbsites.commons.domain.params.GetOneParams;
 import com.hbsites.rpgtracker.application.service.interfaces.CharacterSheetService;
 import com.hbsites.rpgtracker.domain.model.CharacterSheetListItem;
 import com.hbsites.rpgtracker.domain.model.CharacterSheetDetailsItem;
-import com.hbsites.rpgtracker.domain.params.CharacterSheetParams;
 import com.hbsites.rpgtracker.infrastructure.repository.CharacterSheetRepositoryImpl;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,9 +33,9 @@ public class CharacterSheetServiceV1 implements CharacterSheetService {
                 );
     }
 
-    public Uni<CharacterSheetDetailsItem> findSheetBySlug(CharacterSheetParams params) {
+    public Uni<CharacterSheetDetailsItem> findSheetBySlug(GetOneParams params) {
         return characterSheetRepository.findOneBySlug(params.getSlug()).onItem().transform(res ->
-                new CharacterSheetDetailsItem(res.slug(), res.characterName())
+                new CharacterSheetDetailsItem(res.slug(), res.characterName(), res.id(), res.trpgSystem())
         );
     }
 }

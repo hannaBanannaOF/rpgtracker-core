@@ -40,15 +40,27 @@ public class CharacterSheetRepositoryImpl implements CharacterSheetRepository {
     }
 
     @Override
-    public Uni<Boolean> userCanSee(UUID userId, String slug) {
+    public Uni<List<CharacterSheetEntity>> findAllBySessionSlugAndPlayerId(String slug, UUID playerId) {
         CharacterSheetEntity_ characterSheetEntity = new CharacterSheetEntity_();
         SessionEntity_ sessionEntity = new SessionEntity_();
         return Uni.createFrom().item(() -> nativeSql.from(characterSheetEntity)
                 .leftJoin(sessionEntity, on -> on.eq(sessionEntity.id, characterSheetEntity.sessionId))
                 .where(c -> {
+                    c.eq(sessionEntity.slug, slug);
+                    c.eq(characterSheetEntity.playerId, playerId);
+                }).fetch());
+    }
+
+    @Override
+    public Boolean userCanSee(UUID userId, String slug) {
+        CharacterSheetEntity_ characterSheetEntity = new CharacterSheetEntity_();
+        SessionEntity_ sessionEntity = new SessionEntity_();
+        return nativeSql.from(characterSheetEntity)
+                .leftJoin(sessionEntity, on -> on.eq(sessionEntity.id, characterSheetEntity.sessionId))
+                .where(c -> {
                     c.eq(characterSheetEntity.slug, slug);
                     c.eq(characterSheetEntity.playerId, userId);
                     c.or(() -> c.eq(sessionEntity.dmId, userId));
-                }).stream().findAny().isPresent());
+                }).stream().findAny().isPresent();
     }
 }

@@ -1,3 +1,5 @@
 package com.hbsites.rpgtracker.domain.model;
 
-public record CharacterSheetDetailsItem(String slug, String characterName) { }
+import com.hbsites.commons.rpgtracker.domain.enumeration.ETRPGSystem;
+
+public record CharacterSheetDetailsItem(String slug, String characterName, Integer id, ETRPGSystem system) { }

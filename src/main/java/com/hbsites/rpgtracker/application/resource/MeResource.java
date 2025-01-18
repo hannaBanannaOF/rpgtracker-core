@@ -20,7 +20,6 @@ import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/core/api/me")
-@RolesAllowed("user")
 public class MeResource {
 
     @Inject
@@ -31,36 +30,25 @@ public class MeResource {
 
     @GET
     @Path("/sessions")
-    @Produces(MediaType.APPLICATION_JSON)
     public Uni<List<SessionListItem>> getDMedSessions(@BeanParam SessionListParams params) {
         return sessionServiceAdapter.getMySessions(params);
     }
 
     @GET
     @Path("/sessions/calendar")
-    @Produces(MediaType.APPLICATION_JSON)
     public Uni<List<NextSessionItem>> getMyNextSessions(@BeanParam SessionCalendarParams params) {
         return sessionServiceAdapter.getMySessionCalendar(params);
     }
 
     @GET
     @Path("/sessions/next")
-    @Produces(MediaType.APPLICATION_JSON)
     public Uni<NextSessionItem> getMyNextSessions(@BeanParam SessionListParams params) {
         return sessionServiceAdapter.getMyNextSession(params);
     }
 
     @GET
     @Path("/sheets")
-    @Produces(MediaType.APPLICATION_JSON)
     public Uni<List<CharacterSheetListItem>> getMyCharacterSheets(@BeanParam DefaultParams params) {
         return characterSheetAdapter.getCurrentUserSheets(params);
-    }
-
-    @GET
-    @Path("/hello")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Uni<String> greet(){
-        return Uni.createFrom().item(() -> "Hello from service 1");
     }
 }

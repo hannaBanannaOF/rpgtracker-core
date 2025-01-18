@@ -1,8 +1,8 @@
 package com.hbsites.rpgtracker.application.resource;
 
+import com.hbsites.commons.domain.params.GetOneParams;
 import com.hbsites.rpgtracker.application.service.adapters.CharacterSheetAdapter;
 import com.hbsites.rpgtracker.domain.model.CharacterSheetDetailsItem;
-import com.hbsites.rpgtracker.domain.params.CharacterSheetParams;
 import com.hbsites.rpgtracker.infrastructure.interceptors.PermittedSheet;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
@@ -14,7 +14,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("/core/api/sheets")
-@RolesAllowed("user")
 public class CharacterSheetResource {
 
     @Inject
@@ -22,8 +21,7 @@ public class CharacterSheetResource {
 
     @GET
     @Path("/{slug}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Uni<CharacterSheetDetailsItem> findSheetBySlug(@BeanParam @PermittedSheet CharacterSheetParams params) {
+    public Uni<CharacterSheetDetailsItem> findSheetBySlug(@BeanParam @PermittedSheet GetOneParams params) {
         return characterSheetAdapter.findSheetBySlug(params);
     }
 }
