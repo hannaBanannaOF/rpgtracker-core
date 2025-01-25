@@ -70,10 +70,10 @@ public class SessionRepositoryImpl implements SessionRepository {
             sql = sql.limit(1);
         }
         NativeSqlSelectStarting<SessionEntity> finalSql = sql;
-        return Uni.createFrom().item(() -> finalSql.selectAsRow(sessionEntity.slug, sessionEntity.sessionName, sessionEntity.dmId, sessionEntity.trpgSystem, sessionCalendarEntity.sessionDate).fetch()
+        return Uni.createFrom().item(() -> finalSql.selectAsRow(sessionEntity.slug, sessionEntity.sessionName, sessionEntity.dmId, sessionEntity.trpgSystem, sessionCalendarEntity.sessionDate, sessionCalendarEntity.id).fetch()
             .stream()
             .map(r ->
-                    new NextSessionItem(r.get(sessionEntity.slug), r.get(sessionEntity.sessionName), r.get(sessionEntity.trpgSystem), r.get(sessionCalendarEntity.sessionDate), r.get(sessionEntity.dmId).equals(userId))
+                    new NextSessionItem(r.get(sessionEntity.slug), r.get(sessionEntity.sessionName), r.get(sessionEntity.trpgSystem), r.get(sessionCalendarEntity.sessionDate), r.get(sessionEntity.dmId).equals(userId), r.get(sessionCalendarEntity.id))
             ).toList()
         );
     }
@@ -103,6 +103,13 @@ public class SessionRepositoryImpl implements SessionRepository {
         SessionCalendarEntity_ sessionCalendarEntity = new SessionCalendarEntity_();
         SessionCalendarEntity e = new SessionCalendarEntity(null, session.id(), dateTime);
         entityql.insert(sessionCalendarEntity, e).execute();
+        return Uni.createFrom().voidItem();
+    }
+
+    @Override
+    public Uni<Void> deleteSchedule(Integer scheduleId) {
+        SessionCalendarEntity_ sessionCalendarEntity = new SessionCalendarEntity_();
+        nativeSql.delete(sessionCalendarEntity).where(c -> c.eq(sessionCalendarEntity.id, scheduleId)).execute();
         return Uni.createFrom().voidItem();
     }
 

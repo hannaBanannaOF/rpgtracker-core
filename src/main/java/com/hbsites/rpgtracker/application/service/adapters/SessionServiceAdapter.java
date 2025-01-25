@@ -53,6 +53,11 @@ public class SessionServiceAdapter extends VersionedService<SessionService> impl
     }
 
     @Override
+    public Uni<Void> deleteSchedule(GetOneParams params, Integer id) {
+        return getServiceByApiVersion(params.getApiVersion()).deleteSchedule(params, id);
+    }
+
+    @Override
     protected SessionService getServiceByApiVersion(int apiVersion) {
         return switch(apiVersion){
             default -> sessionServiceV1;

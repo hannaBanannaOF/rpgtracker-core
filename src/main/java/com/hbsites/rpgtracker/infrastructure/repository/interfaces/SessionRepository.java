@@ -22,4 +22,6 @@ public interface SessionRepository {
     Uni<SessionEntity> updateInPlay(SessionEntity session);
 
     Uni<Void> scheduleSession(SessionEntity session, LocalDateTime dateTime);
+
+    Uni<Void> deleteSchedule(Integer scheduleId);
 }

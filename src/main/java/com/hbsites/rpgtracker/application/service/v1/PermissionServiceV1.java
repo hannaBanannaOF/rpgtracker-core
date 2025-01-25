@@ -54,7 +54,7 @@ public class PermissionServiceV1 implements PermissionService {
 
         UUID userId = UUID.fromString(token.getSubject());
 
-        return sessionRepository.findAllByPlayerIdOrDmId(userId, DmedFilter.ALL).onItem().transform(sessions -> {
+        return sessionRepository.findAllByPlayerIdOrDmId(userId, DmedFilter.ONLY_DM).onItem().transform(sessions -> {
             Map<ETRPGSystem, List<SessionEntity>> sessionByTrpgSystem = sessions.stream().collect(Collectors.groupingBy(SessionEntity::trpgSystem));
             if (sessionByTrpgSystem.containsKey(ETRPGSystem.GHOSTBUSTERS)) {
                 menuItems.add(new UserInfo.SideMenu.MenuItem("ghostbusters.main", "gi", "GiFloatingGhost", "#", List.of(), List.of()));

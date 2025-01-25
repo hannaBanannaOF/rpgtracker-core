@@ -35,7 +35,9 @@ public class CharacterSheetServiceV1 implements CharacterSheetService {
 
     public Uni<CharacterSheetDetailsItem> findSheetBySlug(GetOneParams params) {
         return characterSheetRepository.findOneBySlug(params.getSlug()).onItem().transform(res ->
-                new CharacterSheetDetailsItem(res.slug(), res.characterName(), res.id(), res.trpgSystem())
+                new CharacterSheetDetailsItem(res.slug(), res.characterName(), res.id(), res.trpgSystem(),
+                    UUID.fromString(token.getSubject()).equals(res.playerId())
+                )
         );
     }
 }

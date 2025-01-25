@@ -125,4 +125,15 @@ public class SessionServiceV1 implements SessionService {
             return sessionRepository.scheduleSession(session, schedule.dateTime());
         });
     }
+
+    @Override
+    public Uni<Void> deleteSchedule(GetOneParams params, Integer id) {
+        return findSessionBySlug(params).onItem().transformToUni(session -> {
+            if (!session.dmed()) {
+                throw new ForbiddenException();
+            }
+            return sessionRepository.deleteSchedule(id);
+        }
+        );
+    }
 }

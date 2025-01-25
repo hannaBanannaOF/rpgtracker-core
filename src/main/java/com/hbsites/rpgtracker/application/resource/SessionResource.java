@@ -6,15 +6,14 @@ import com.hbsites.rpgtracker.domain.model.ScheduleItem;
 import com.hbsites.rpgtracker.domain.model.SessionDetailsItem;
 import com.hbsites.rpgtracker.infrastructure.interceptors.PermittedSession;
 import io.smallrye.mutiny.Uni;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BeanParam;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.PathParam;
 
 @Path("/core/api/sessions")
 public class SessionResource {
@@ -37,5 +36,11 @@ public class SessionResource {
     @Path("/{slug}/schedule")
     public Uni<Void> scheduleSession(@BeanParam @PermittedSession GetOneParams params, ScheduleItem schedule) {
         return sessionServiceAdapter.scheduleSession(params, schedule);
+    }
+
+    @DELETE
+    @Path("/{slug}/schedule/{scheduleId}")
+    public Uni<Void> deleteSchedule(@BeanParam @PermittedSession GetOneParams params, @PathParam("scheduleId") Integer scheduleId) {
+        return sessionServiceAdapter.deleteSchedule(params, scheduleId);
     }
 }

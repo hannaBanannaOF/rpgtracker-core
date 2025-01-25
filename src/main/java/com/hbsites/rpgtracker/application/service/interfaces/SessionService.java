@@ -24,4 +24,6 @@ public interface SessionService {
     Uni<SessionDetailsItem> setSessionInPlay(GetOneParams params);
 
     Uni<Void> scheduleSession(GetOneParams params, ScheduleItem schedule);
+
+    Uni<Void> deleteSchedule(GetOneParams params, Integer id);
 }
